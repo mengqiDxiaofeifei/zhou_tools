@@ -80,9 +80,16 @@
 
         //拖拽上传
         upload.render({
+            before: function () {
+                var loading = layer.load(1, {
+                    shade: false,
+                    time: 2 * 1000
+                });
+            },
             elem: '#test10'
             , url: '/kl/tools/ocrImgDistinguish'
             , done: function (res) {
+                layer.closeAll('loading');
                 if (res.words_result != null) {
                     console.log(1)
                     var data = res.words_result;

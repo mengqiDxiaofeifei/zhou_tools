@@ -54,7 +54,6 @@ public class ImgUtils {
         AipOcr client = getAuth();
         // 调用接口
         JSONObject res = client.basicGeneral(img, new HashMap<String, String>());
-        System.out.println(res.toString(2));
         return res.toString(2);
     }
 

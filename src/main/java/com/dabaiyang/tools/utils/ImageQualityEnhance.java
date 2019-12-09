@@ -59,7 +59,6 @@ public class ImageQualityEnhance {
             String accessToken = AuthService.getAuth();
 
             String result = HttpUtil.post(url, accessToken, param);
-            System.out.println(result);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

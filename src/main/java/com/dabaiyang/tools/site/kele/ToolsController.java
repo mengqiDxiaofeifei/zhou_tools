@@ -4,6 +4,7 @@ import com.dabaiyang.tools.constant.XiaoBaiConstant;
 import com.dabaiyang.tools.utils.HttpUtils;
 import com.dabaiyang.tools.utils.ImageQualityEnhance;
 import com.dabaiyang.tools.utils.ImgUtils;
+import com.dabaiyang.tools.utils.Plant;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,6 +52,19 @@ public class ToolsController {
     public String ocrImgDistinguish(MultipartFile file) throws IOException {
         byte[] bytes = file.getBytes();
         return ImgUtils.orcImgDistinguish(bytes);
+    }
+
+
+    /**
+     * 植物识别
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("/plantDetect")
+    public String plantDetect(MultipartFile file) throws IOException {
+        byte[] bytes = file.getBytes();
+        return Plant.plant(bytes);
     }
 
 
