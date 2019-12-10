@@ -80,15 +80,14 @@
         //拖拽上传
         upload.render({
             before: function () {
-                var loading = layer.load(1, {
-                    shade: false,
+                var loading = layer.load(0, {
+                    shade: [0.1, '#fff'],
                     time: 10 * 1000
                 });
             },
             elem: '#test10'
             , url: '/kl/tools/plantDetect'
             , done: function (res) {
-                layer.closeAll('loading');
                 if (res.result != null) {
                     console.log(1)
                     var data = res.result;
@@ -98,7 +97,7 @@
                     })
                     $("#textAppr").text(html);
                 }
-
+                layer.closeAll('loading');
             }
         });
 
