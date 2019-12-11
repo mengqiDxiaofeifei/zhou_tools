@@ -38,6 +38,11 @@ public class IndexController {
         return "pant";
     }
 
+    @RequestMapping("/convert")
+    public String convert(){
+        return "convert";
+    }
+
     @RequestMapping("/imgdeal")
     public String imgdeal(){
         return "img_deal";

@@ -1,5 +1,8 @@
 package com.dabaiyang.tools.utils;
 
+import com.alibaba.fastjson.JSONObject;
+import com.dabaiyang.tools.constant.XiaoBaiConstant;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -127,16 +130,18 @@ public class HttpUtils {
         return result;
     }
 
-    //TcYixnx9bg2IXJo0wIWjZnc6vk4M7ywwSe6s088tDSuct2YaLiB2grKhKtECrLG8RMuNWpbKsGFJ9
-    public static void main(String[] args) {
-        Map<String, String> param = new HashMap<>();
-        param.put("app_key", "C5BFFAE19E27769EA5A50CBDAE7BAD24");
-        param.put("s", "Ext.IP.GetInfo");
-        String secret = "TcYixnx9bg2IXJo0wIWjZnc6vk4M7ywwSe6s088tDSuct2YaLiB2grKhKtECrLG8RMuNWpbKsGFJ9";
-        //String s = fetchRsSign(param, "TcYixnx9bg2IXJo0wIWjZnc6vk4M7ywwSe6s088tDSuct2YaLiB2grKhKtECrLG8RMuNWpbKsGFJ9");
-        String s = sendPost("http://hd215.api.yesapi.cn/", buildParams(param, secret));
-        System.out.println("s = " + s);
-    }
+//    //TcYixnx9bg2IXJo0wIWjZnc6vk4M7ywwSe6s088tDSuct2YaLiB2grKhKtECrLG8RMuNWpbKsGFJ9
+//    public static void main(String[] args) {
+//        Map<String, String> param = new HashMap<>();
+//        param.put("app_key", "C5BFFAE19E27769EA5A50CBDAE7BAD24");
+//        param.put("s", "App.Opencc.Convert");
+//        param.put("text", "哈哈发阿发");
+//        param.put("type", "t2s");
+//        String secret = "TcYixnx9bg2IXJo0wIWjZnc6vk4M7ywwSe6s088tDSuct2YaLiB2grKhKtECrLG8RMuNWpbKsGFJ9";
+//        //String s = fetchRsSign(param, "TcYixnx9bg2IXJo0wIWjZnc6vk4M7ywwSe6s088tDSuct2YaLiB2grKhKtECrLG8RMuNWpbKsGFJ9");
+//        String s = sendPost("http://hd215.api.yesapi.cn/", buildParams(param, secret));
+//        System.out.println("s = " + s);
+//    }
 
 
     public static String fetchRsSign(Map<String, String> param, String secret) {
@@ -160,4 +165,66 @@ public class HttpUtils {
         stringBuilder.append("sign=").append(fetchRsSign(param, secret));
         return stringBuilder.toString();
     }
+
+
+    /**
+     * 设置计数器
+     * value  初始值
+     * name  计数器名称
+     */
+    public static void createCounter(String name, String value) {
+        Map<String, String> param = new HashMap<>();
+        param.put("name", name);
+        param.put("value", value);
+        param.put("type", "forever");
+        param.put(XiaoBaiConstant.XIAOBAI_APP_KEY, XiaoBaiConstant.XIAOBAI_APP_KEY_VALUE);
+        param.put(XiaoBaiConstant.XIAOBAI_S_IP_QUERY, XiaoBaiConstant.XIAOBAI_S_COUNTER_SETUP_QUERY_VALUE);
+        HttpUtils.sendPost(XiaoBaiConstant.XIAOBAI_API_URL, HttpUtils.buildParams(param, XiaoBaiConstant.XIAOBAI_SECRET));
+    }
+ /**
+     * 增加
+     * value  值
+     * name  计数器名称
+     */
+    public static void addCounter(String name, String value) {
+        Map<String, String> param = new HashMap<>();
+        param.put("name", name);
+        param.put("value", value);
+        param.put("type", "forever");
+        param.put(XiaoBaiConstant.XIAOBAI_APP_KEY, XiaoBaiConstant.XIAOBAI_APP_KEY_VALUE);
+        param.put(XiaoBaiConstant.XIAOBAI_S_IP_QUERY, XiaoBaiConstant.XIAOBAI_S_COUNTER_UPDATE_QUERY_VALUE);
+        HttpUtils.sendPost(XiaoBaiConstant.XIAOBAI_API_URL, HttpUtils.buildParams(param, XiaoBaiConstant.XIAOBAI_SECRET));
+    }
+ /**
+     * 查询计数器
+     * value  初始值
+     * name  计数器名称
+     */
+    public static boolean queryCounter(String name) {
+        Map<String, String> param = new HashMap<>();
+        param.put("name", name);
+        param.put("type", "forever");
+        param.put(XiaoBaiConstant.XIAOBAI_APP_KEY, XiaoBaiConstant.XIAOBAI_APP_KEY_VALUE);
+        param.put(XiaoBaiConstant.XIAOBAI_S_IP_QUERY, XiaoBaiConstant.XIAOBAI_S_COUNTER_GET_QUERY_VALUE);
+        String resp = HttpUtils.sendPost(XiaoBaiConstant.XIAOBAI_API_URL, HttpUtils.buildParams(param, XiaoBaiConstant.XIAOBAI_SECRET));
+        resp = resp.substring(2, resp.length());
+        JSONObject object = JSONObject.parseObject(resp);
+        if (object != null && object.get("ret") != null && (Integer) object.get("ret") == 200) {
+            String value = object.get("data").toString();
+            value = JSONObject.parseObject(value).get("err_code").toString();
+            if("1".equals(value)){
+                return false;
+            }else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        boolean b = queryCounter("浏览次数");
+        System.out.println("b = " + b);
+    }
+
 }

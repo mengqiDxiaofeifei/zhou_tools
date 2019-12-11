@@ -21,7 +21,10 @@
             color: grey;
             font-size: 12px;
         }
-        body{overflow-x:hidden;}
+
+        body {
+            overflow-x: hidden;
+        }
     </style>
 </head>
 
@@ -47,14 +50,9 @@
                 </div>
             </div>
         </div>
-        <div class="layui-col-mh12">
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">说明：</label>
-                <div class="info">
-                    支持识别超过2万种通用植物和近8千种花卉
-                </div>
-            </div>
-        </div>
+        <blockquote class="layui-elem-quote layui-text">
+            支持识别超过2万种通用植物和近8千种花卉
+        </blockquote>
     </div>
 </div>
 
@@ -93,7 +91,7 @@
                     var data = res.result;
                     var html = "";
                     data.forEach(function (item, index) {
-                        html = html + item.name + "(" + item.score + ")"+"\n";
+                        html = html + item.name + "(" + item.score + ")" + "\n";
                     })
                     $("#textAppr").text(html);
                 }
