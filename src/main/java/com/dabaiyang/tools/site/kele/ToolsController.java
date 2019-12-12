@@ -25,6 +25,17 @@ import java.util.Map;
 public class ToolsController {
 
     /**
+     * 查询使用次数
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("/getCounter")
+    public String getCounter(String counterName) {
+        return HttpUtils.queryCounterInfo(counterName);
+    }
+
+    /**
      * 查询IP地址归属信息
      *
      * @param ipAdr
@@ -76,9 +87,10 @@ public class ToolsController {
         Map<String, String> param = new HashMap<>();
         param.put(XiaoBaiConstant.XIAOBAI_APP_KEY, XiaoBaiConstant.XIAOBAI_APP_KEY_VALUE);
         param.put(XiaoBaiConstant.XIAOBAI_S_IP_QUERY, XiaoBaiConstant.XIAOBAI_S_CITY_QUERY_VALUE);
-        String s = HttpUtils.sendPost(XiaoBaiConstant.XIAOBAI_API_URL, HttpUtils.buildParams(param, XiaoBaiConstant.XIAOBAI_SECRET));
-        s = s.substring(2, s.length());
-        return s;
+        String resp = HttpUtils.sendPost(XiaoBaiConstant.XIAOBAI_API_URL, HttpUtils.buildParams(param, XiaoBaiConstant.XIAOBAI_SECRET));
+        resp = resp.substring(2, resp.length());
+        return resp;
+
     }
 
 
@@ -89,12 +101,21 @@ public class ToolsController {
      * @return
      */
     @RequestMapping("/queryUniversity")
+    @SystemControllerCounter
     public String queryUniversity(String schoolName, String schoolLevel, String schoolProvince, String schoolCity) {
         Map<String, String> param = new HashMap<>();
-        param.put("school_name", schoolName);
-        param.put("school_level", schoolLevel);
-        param.put("school_province", schoolProvince);
-        param.put("school_city", schoolCity);
+        if (schoolName != null && !schoolName.equals("")) {
+            param.put("school_name", schoolName);
+        }
+        if (schoolLevel != null && !schoolLevel.equals("")) {
+            param.put("school_level", schoolLevel);
+        }
+        if (schoolProvince != null && !schoolProvince.equals("")) {
+            param.put("school_province", schoolProvince);
+        }
+        if (schoolCity != null && !schoolCity.equals("")) {
+            param.put("school_city", schoolCity);
+        }
         param.put(XiaoBaiConstant.XIAOBAI_APP_KEY, XiaoBaiConstant.XIAOBAI_APP_KEY_VALUE);
         param.put(XiaoBaiConstant.XIAOBAI_S_IP_QUERY, XiaoBaiConstant.XIAOBAI_S_UNIVERSITY_SEARCH_QUERY_VALUE);
         String s = HttpUtils.sendPost(XiaoBaiConstant.XIAOBAI_API_URL, HttpUtils.buildParams(param, XiaoBaiConstant.XIAOBAI_SECRET));
@@ -109,6 +130,7 @@ public class ToolsController {
      * @return
      */
     @RequestMapping("/queryNickname")
+    @SystemControllerCounter
     public String queryNickname() {
         Map<String, String> param = new HashMap<>();
         param.put(XiaoBaiConstant.XIAOBAI_APP_KEY, XiaoBaiConstant.XIAOBAI_APP_KEY_VALUE);
@@ -126,6 +148,7 @@ public class ToolsController {
      * @return
      */
     @RequestMapping("/queryIdNumber")
+    @SystemControllerCounter
     public String queryIdNumber(String idNum) {
         Map<String, String> param = new HashMap<>();
         param.put("id_number", idNum);
@@ -144,6 +167,7 @@ public class ToolsController {
      * @return
      */
     @RequestMapping("/queryPhoneLocation")
+    @SystemControllerCounter
     public String queryPhoneLocation(String phone) {
         Map<String, String> param = new HashMap<>();
         param.put("phone", phone);
@@ -155,7 +179,6 @@ public class ToolsController {
     }
 
 
-
     /**
      * 姓名转拼音
      *
@@ -163,6 +186,7 @@ public class ToolsController {
      * @return
      */
     @RequestMapping("/queryPinyin")
+    @SystemControllerCounter
     public String queryPinyin(String text) {
         Map<String, String> param = new HashMap<>();
         param.put("text", text);
@@ -180,6 +204,7 @@ public class ToolsController {
      * @return
      */
     @RequestMapping("/ocrImgDistinguish")
+    @SystemControllerCounter
     public String ocrImgDistinguish(MultipartFile file) throws IOException {
         byte[] bytes = file.getBytes();
         return ImgUtils.orcImgDistinguish(bytes);
@@ -193,6 +218,7 @@ public class ToolsController {
      * @return
      */
     @RequestMapping("/plantDetect")
+    @SystemControllerCounter
     public String plantDetect(MultipartFile file) throws IOException {
         byte[] bytes = file.getBytes();
         return Plant.plant(bytes);
@@ -207,6 +233,7 @@ public class ToolsController {
      * @return
      */
     @RequestMapping("/imageQualityEnhance")
+    @SystemControllerCounter
     public String imageQualityEnhance(MultipartFile file) throws IOException {
         byte[] bytes = file.getBytes();
         return ImageQualityEnhance.imageQualityEnhance(bytes);
@@ -219,6 +246,7 @@ public class ToolsController {
      * @return
      */
     @RequestMapping("/colourize")
+    @SystemControllerCounter
     public String colourize(MultipartFile file) throws IOException {
         byte[] bytes = file.getBytes();
         return ImageQualityEnhance.colourize(bytes);
@@ -231,6 +259,7 @@ public class ToolsController {
      * @return
      */
     @RequestMapping("/stretchRestore")
+    @SystemControllerCounter
     public String stretchRestore(MultipartFile file) throws IOException {
         byte[] bytes = file.getBytes();
         return ImageQualityEnhance.stretchRestore(bytes);

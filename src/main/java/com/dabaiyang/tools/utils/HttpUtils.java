@@ -130,18 +130,18 @@ public class HttpUtils {
         return result;
     }
 
-//    //TcYixnx9bg2IXJo0wIWjZnc6vk4M7ywwSe6s088tDSuct2YaLiB2grKhKtECrLG8RMuNWpbKsGFJ9
-//    public static void main(String[] args) {
-//        Map<String, String> param = new HashMap<>();
-//        param.put("app_key", "C5BFFAE19E27769EA5A50CBDAE7BAD24");
-//        param.put("s", "App.Opencc.Convert");
-//        param.put("text", "哈哈发阿发");
-//        param.put("type", "t2s");
-//        String secret = "TcYixnx9bg2IXJo0wIWjZnc6vk4M7ywwSe6s088tDSuct2YaLiB2grKhKtECrLG8RMuNWpbKsGFJ9";
-//        //String s = fetchRsSign(param, "TcYixnx9bg2IXJo0wIWjZnc6vk4M7ywwSe6s088tDSuct2YaLiB2grKhKtECrLG8RMuNWpbKsGFJ9");
-//        String s = sendPost("http://hd215.api.yesapi.cn/", buildParams(param, secret));
-//        System.out.println("s = " + s);
-//    }
+    //TcYixnx9bg2IXJo0wIWjZnc6vk4M7ywwSe6s088tDSuct2YaLiB2grKhKtECrLG8RMuNWpbKsGFJ9
+    public static void main(String[] args) {
+        Map<String, String> param = new HashMap<>();
+        param.put("app_key", "C5BFFAE19E27769EA5A50CBDAE7BAD24");
+        param.put("s", "App.Common_University.Search");
+       // param.put("school_name", "重庆");
+        param.put("school_level", "本科");
+        String secret = "TcYixnx9bg2IXJo0wIWjZnc6vk4M7ywwSe6s088tDSuct2YaLiB2grKhKtECrLG8RMuNWpbKsGFJ9";
+        //String s = fetchRsSign(param, "TcYixnx9bg2IXJo0wIWjZnc6vk4M7ywwSe6s088tDSuct2YaLiB2grKhKtECrLG8RMuNWpbKsGFJ9");
+        String s = sendPost("http://hd215.api.yesapi.cn/", buildParams(param, secret));
+        System.out.println("s = " + s);
+    }
 
 
     public static String fetchRsSign(Map<String, String> param, String secret) {
@@ -181,7 +181,8 @@ public class HttpUtils {
         param.put(XiaoBaiConstant.XIAOBAI_S_IP_QUERY, XiaoBaiConstant.XIAOBAI_S_COUNTER_SETUP_QUERY_VALUE);
         HttpUtils.sendPost(XiaoBaiConstant.XIAOBAI_API_URL, HttpUtils.buildParams(param, XiaoBaiConstant.XIAOBAI_SECRET));
     }
- /**
+
+    /**
      * 增加
      * value  值
      * name  计数器名称
@@ -195,7 +196,8 @@ public class HttpUtils {
         param.put(XiaoBaiConstant.XIAOBAI_S_IP_QUERY, XiaoBaiConstant.XIAOBAI_S_COUNTER_UPDATE_QUERY_VALUE);
         HttpUtils.sendPost(XiaoBaiConstant.XIAOBAI_API_URL, HttpUtils.buildParams(param, XiaoBaiConstant.XIAOBAI_SECRET));
     }
- /**
+
+    /**
      * 查询计数器
      * value  初始值
      * name  计数器名称
@@ -212,9 +214,9 @@ public class HttpUtils {
         if (object != null && object.get("ret") != null && (Integer) object.get("ret") == 200) {
             String value = object.get("data").toString();
             value = JSONObject.parseObject(value).get("err_code").toString();
-            if("1".equals(value)){
+            if ("1".equals(value)) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
         } else {
@@ -222,9 +224,25 @@ public class HttpUtils {
         }
     }
 
-    public static void main(String[] args) {
-        boolean b = queryCounter("浏览次数");
-        System.out.println("b = " + b);
+    /**
+     * 查询计数器
+     * value  初始值
+     * name  计数器名称
+     */
+    public static String queryCounterInfo(String name) {
+        Map<String, String> param = new HashMap<>();
+        param.put("name", name);
+        param.put("type", "forever");
+        param.put(XiaoBaiConstant.XIAOBAI_APP_KEY, XiaoBaiConstant.XIAOBAI_APP_KEY_VALUE);
+        param.put(XiaoBaiConstant.XIAOBAI_S_IP_QUERY, XiaoBaiConstant.XIAOBAI_S_COUNTER_GET_QUERY_VALUE);
+        String resp = HttpUtils.sendPost(XiaoBaiConstant.XIAOBAI_API_URL, HttpUtils.buildParams(param, XiaoBaiConstant.XIAOBAI_SECRET));
+        resp = resp.substring(2, resp.length());
+       return resp;
     }
+
+//    public static void main(String[] args) {
+//        String queryIpInfo = queryCounterInfo("queryIpInfo");
+//        System.out.println("b = " + queryIpInfo);
+//    }
 
 }

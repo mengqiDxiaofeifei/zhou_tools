@@ -25,15 +25,16 @@
 <body>
 
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-    <legend>简繁体转换</legend>
+    <legend>身份证所在地查询</legend>
 </fieldset>
 
 <form class="layui-form" action="" style="width: 60%;" id="myForm">
     <div class="layui-col-md6">
-        <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">转换前</label>
+        <div class="layui-form-item">
+            <label class="layui-form-label">身份证号码</label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" lay-verify="required" name="text" class="layui-textarea"></textarea>
+                <input type="text" name="idNum" lay-verify="idNum" style="width: 100%;" placeholder="请输入身份证号码"
+                       class="layui-input">
             </div>
         </div>
     </div>
@@ -41,39 +42,21 @@
         <span class="fontCls" id="fontSpan">0</span>
         <img class="iconimg" src="img/eye.png"/>
     </div>
-    <div class="layui-col-mh12">
-        <div class="layui-form-item">
-            <label class="layui-form-label">类型</label>
-            <div class="layui-input-block">
-                <select name="type" lay-filter="aihao">
-                    <option value=""></option>
-                    <option value="s2t" selected="">简体到繁体</option>
-                    <option value="t2s">繁体到简体</option>
-                    <option value="s2tw">简体到台湾正体</option>
-                    <option value="tw2s">台湾正体到简体</option>
-                    <option value="s2hk">简体到香港繁体（香港小学学习字词表标准）</option>
-                    <option value="hk2s">香港繁体（香港小学学习字词表标准）到简体</option>
-                    <option value="s2twp">简体到繁体（台湾正体标准）并转换为台湾常用词汇</option>
-                    <option value="tw2sp">台湾正体到简体</option>
-                </select>
-            </div>
-        </div>
-    </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1">转换</button>
+            <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1">查询</button>
             <button type="reset" class="layui-btn layui-btn-primary" onclick="resetForm()">重置</button>
         </div>
     </div>
 </form>
-<div class="layui-form-item layui-form-text" style="width: 60%;">
-    <label class="layui-form-label">转换后</label>
+<div class="layui-form-item layui-form-text" style="width: 60%">
+    <label class="layui-form-label">查询结果</label>
     <div class="layui-input-block">
         <textarea placeholder="" id="textID" class="layui-textarea"></textarea>
     </div>
 </div>
 <blockquote class="layui-elem-quote layui-text">
-    智能的完成简繁体转换，支持：简体到繁体，繁体到简体，简体到台湾正体，台湾正体到简体，简体到香港繁体（香港小学学习字词表标准），香港繁体（香港小学学习字词表标准）到简体，简体到繁体（台湾正体标准）并转换为台湾常用词汇，繁体（台湾正体标准）到简体并转换为中国大陆常用词汇
+    根据身份证号码，查询地区信息
 </blockquote>
 
 <script src="layui/layui.js" charset="utf-8"></script>
@@ -91,16 +74,31 @@
                 time: 10 * 1000
             });
 
+            //自定义验证规则
+            form.verify({
+                idNum: [
+                    /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+                    ,'身份证格式有误！'
+                ]
+            });
+
             $.ajax({
-                url: "/kl/tools/convert",
+                url: "/kl/tools/queryIdNumber",
                 type: "POST",
                 dataType: "json",
                 data: data.field,
                 success: function (result) {
                     layer.close(loading);
                     if (result.ret === 200 && result.data != null) {
-                        var data = result.data.text;
-                        $("#textID").text(data);
+                        var data = result.data.info;
+                        var html = "出生日期："+data.birthday+"\n"+
+                            "年龄："+data.age+"\n"+
+                            "性别："+data.gender+"\n"+
+                            "城市："+data.city+"\n"+
+                            "省份："+data.province+"\n"+
+                            "地区："+data.area+"\n"+
+                            "地址："+data.address;
+                        $("#textID").text(html);
                     }
                 }
             });
@@ -120,7 +118,7 @@
             url: "/kl/tools/getCounter",
             type: "GET",
             dataType: "json",
-            data: {"counterName": "convert"},
+            data: {"counterName": "queryIdNumber"},
             success: function (result) {
                 if (result.ret === 200 && result.data != null) {
                     var data = result.data.value;

@@ -25,6 +25,15 @@
         body {
             overflow-x: hidden;
         }
+        .iconimg{
+            width: 5%;
+            height: 5%;
+            float: right;
+        }
+        .fontCls{
+            margin-top: 2px !important;
+            float: right;
+        }
     </style>
 </head>
 
@@ -34,13 +43,17 @@
 </fieldset>
 <div>
     <div class="layui-row layui-col-space20">
-        <div class="layui-col-md12">
+        <div class="layui-col-md6">
             <form class="layui-form" action="/kl/tools/Q.ip.info">
                 <div class="layui-upload-drag upload_icon" id="test10">
                     <i class="layui-icon"></i>
                     <p>点击上传，或将文件拖拽到此处</p>
                 </div>
             </form>
+        </div>
+        <div class="layui-col-md6">
+            <span class="fontCls" id="fontSpan">0</span>
+            <img class="iconimg" src="img/eye.png" />
         </div>
         <div class="layui-col-mh12">
             <div class="layui-form-item layui-form-text">
@@ -66,6 +79,7 @@
             layer = layui.layer,
             upload = layui.upload;
         //自定义验证规则
+        init();
         form.verify({
             ipadr: function (value) {
                 if (value.length < 5) {
@@ -100,6 +114,21 @@
         });
 
     });
+
+    function init() {
+        $.ajax({
+            url: "/kl/tools/getCounter",
+            type: "GET",
+            dataType: "json",
+            data: {"counterName": "plantDetect"},
+            success: function (result) {
+                if (result.ret === 200 && result.data != null) {
+                    var data = result.data.value;
+                    $("#fontSpan").text(data);
+                }
+            }
+        });
+    }
 </script>
 
 </body>

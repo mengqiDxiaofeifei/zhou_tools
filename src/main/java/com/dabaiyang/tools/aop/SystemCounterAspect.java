@@ -5,12 +5,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Aspect
 @Component
@@ -24,9 +19,8 @@ public class SystemCounterAspect {
 
     @Before("serviceAspect()")
     public void doServiceBefore(JoinPoint joinPoint) {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         //请求的参数
-        String methodName = (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()");
+        String methodName = joinPoint.getSignature().getName();
         System.out.println("methodName = " + methodName);
         if (HttpUtils.queryCounter(methodName)) {
             HttpUtils.addCounter(methodName, "1");

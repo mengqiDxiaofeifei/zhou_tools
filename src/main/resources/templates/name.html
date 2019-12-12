@@ -25,55 +25,30 @@
 <body>
 
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-    <legend>简繁体转换</legend>
+    <legend>随机获取一个昵称</legend>
 </fieldset>
 
-<form class="layui-form" action="" style="width: 60%;" id="myForm">
+<form class="layui-form" action="" id="myForm" style="width: 60%;">
     <div class="layui-col-md6">
-        <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">转换前</label>
+        <div class="layui-form-item">
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" lay-verify="required" name="text" class="layui-textarea"></textarea>
+                <button type="button" class="layui-btn layui-anim layui-anim-scale" lay-submit="" lay-filter="demo1">获取</button>
             </div>
         </div>
     </div>
     <div class="layui-col-md6">
         <span class="fontCls" id="fontSpan">0</span>
-        <img class="iconimg" src="img/eye.png"/>
-    </div>
-    <div class="layui-col-mh12">
-        <div class="layui-form-item">
-            <label class="layui-form-label">类型</label>
-            <div class="layui-input-block">
-                <select name="type" lay-filter="aihao">
-                    <option value=""></option>
-                    <option value="s2t" selected="">简体到繁体</option>
-                    <option value="t2s">繁体到简体</option>
-                    <option value="s2tw">简体到台湾正体</option>
-                    <option value="tw2s">台湾正体到简体</option>
-                    <option value="s2hk">简体到香港繁体（香港小学学习字词表标准）</option>
-                    <option value="hk2s">香港繁体（香港小学学习字词表标准）到简体</option>
-                    <option value="s2twp">简体到繁体（台湾正体标准）并转换为台湾常用词汇</option>
-                    <option value="tw2sp">台湾正体到简体</option>
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1">转换</button>
-            <button type="reset" class="layui-btn layui-btn-primary" onclick="resetForm()">重置</button>
-        </div>
+        <img class="iconimg" src="img/eye.png" />
     </div>
 </form>
 <div class="layui-form-item layui-form-text" style="width: 60%;">
-    <label class="layui-form-label">转换后</label>
+    <label class="layui-form-label">查询结果</label>
     <div class="layui-input-block">
         <textarea placeholder="" id="textID" class="layui-textarea"></textarea>
     </div>
 </div>
 <blockquote class="layui-elem-quote layui-text">
-    智能的完成简繁体转换，支持：简体到繁体，繁体到简体，简体到台湾正体，台湾正体到简体，简体到香港繁体（香港小学学习字词表标准），香港繁体（香港小学学习字词表标准）到简体，简体到繁体（台湾正体标准）并转换为台湾常用词汇，繁体（台湾正体标准）到简体并转换为中国大陆常用词汇
+    可以根据偏好，随机产生一个中文昵称、英文昵称、男性昵称、女性昵称。减少起名字的苦恼。
 </blockquote>
 
 <script src="layui/layui.js" charset="utf-8"></script>
@@ -92,14 +67,13 @@
             });
 
             $.ajax({
-                url: "/kl/tools/convert",
+                url: "/kl/tools/queryNickname",
                 type: "POST",
                 dataType: "json",
-                data: data.field,
                 success: function (result) {
                     layer.close(loading);
                     if (result.ret === 200 && result.data != null) {
-                        var data = result.data.text;
+                        var data = result.data.nickname;
                         $("#textID").text(data);
                     }
                 }
@@ -109,10 +83,6 @@
     });
 
 
-    function resetForm() {
-        $("#myForm")[0].reset();
-        $("#textID").text("");
-    }
 
 
     function init() {
@@ -120,7 +90,7 @@
             url: "/kl/tools/getCounter",
             type: "GET",
             dataType: "json",
-            data: {"counterName": "convert"},
+            data: {"counterName": "queryNickname"},
             success: function (result) {
                 if (result.ret === 200 && result.data != null) {
                     var data = result.data.value;
