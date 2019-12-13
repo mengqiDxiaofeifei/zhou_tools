@@ -38,6 +38,11 @@ public class IndexController {
         return "pant";
     }
 
+    @RequestMapping("/removal")
+    public String removal() {
+        return "removal";
+    }
+
     @RequestMapping("/convert")
     public String convert() {
         return "convert";

@@ -1,15 +1,21 @@
 package com.dabaiyang.tools.site.kele;
 
+import com.dabaiyang.tools.DouYinQushuiyin;
 import com.dabaiyang.tools.annotion.SystemControllerCounter;
 import com.dabaiyang.tools.constant.XiaoBaiConstant;
+import com.dabaiyang.tools.enity.Response;
 import com.dabaiyang.tools.utils.HttpUtils;
 import com.dabaiyang.tools.utils.ImageQualityEnhance;
 import com.dabaiyang.tools.utils.ImgUtils;
 import com.dabaiyang.tools.utils.Plant;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -265,5 +271,19 @@ public class ToolsController {
         return ImageQualityEnhance.stretchRestore(bytes);
     }
 
+
+
+    /**
+     * 抖音去水印
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping("/douyinRemoval")
+    @SystemControllerCounter
+    public Response douyinRemoval(String url, HttpServletResponse response) throws Exception {
+         DouYinQushuiyin.downloadVideo(url,response);
+         return Response.buildSuccessResponse();
+    }
 
 }
