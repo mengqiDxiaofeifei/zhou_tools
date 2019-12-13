@@ -19,7 +19,7 @@
         <div class="layui-logo">可乐工具</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item"><a href="">首页</a></li>
+            <li class="layui-nav-item"><a href="list">首页</a></li>
             <li class="layui-nav-item"><a href="home">排行榜</a></li>
             <li class="layui-nav-item">
                 <a href="javascript:;">反馈建议</a>
@@ -82,7 +82,7 @@
     //JavaScript代码区域
     layui.use('element', function () {
         var element = layui.element;
-
+        goto("list");
     });
 
     function goto(url) {

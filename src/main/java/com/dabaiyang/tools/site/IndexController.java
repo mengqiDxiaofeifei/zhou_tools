@@ -43,6 +43,11 @@ public class IndexController {
         return "convert";
     }
 
+    @RequestMapping("/list")
+    public String list() {
+        return "list";
+    }
+
     @RequestMapping("/name2pingyin")
     public String name2pingyin() {
         return "name2pingyin";
