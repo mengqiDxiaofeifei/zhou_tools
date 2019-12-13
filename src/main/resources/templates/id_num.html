@@ -10,12 +10,13 @@
     <link rel="stylesheet" href="layui/css/layui.css" media="all">
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
     <style type="text/css">
-        .iconimg{
+        .iconimg {
             width: 5%;
             height: 5%;
             float: right;
         }
-        .fontCls{
+
+        .fontCls {
             margin-top: 2px !important;
             float: right;
         }
@@ -76,10 +77,15 @@
 
             //自定义验证规则
             form.verify({
-                idNum: [
-                    /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
-                    ,'身份证格式有误！'
-                ]
+                idNum: function (value) {
+                    if (value.length > 0) {
+                        if (!value.match(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/)) {
+                            return '身份证号码不合法！';
+                        }
+                    } else {
+                        return '身份证号码不能为空！';
+                    }
+                }
             });
 
             $.ajax({
@@ -91,13 +97,13 @@
                     layer.close(loading);
                     if (result.ret === 200 && result.data != null) {
                         var data = result.data.info;
-                        var html = "出生日期："+data.birthday+"\n"+
-                            "年龄："+data.age+"\n"+
-                            "性别："+data.gender+"\n"+
-                            "城市："+data.city+"\n"+
-                            "省份："+data.province+"\n"+
-                            "地区："+data.area+"\n"+
-                            "地址："+data.address;
+                        var html = "出生日期：" + data.birthday + "\n" +
+                            "年龄：" + data.age + "\n" +
+                            "性别：" + data.gender + "\n" +
+                            "城市：" + data.city + "\n" +
+                            "省份：" + data.province + "\n" +
+                            "地区：" + data.area + "\n" +
+                            "地址：" + data.address;
                         $("#textID").text(html);
                     }
                 }
