@@ -10,12 +10,13 @@
     <link rel="stylesheet" href="layui/css/layui.css" media="all">
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
     <style type="text/css">
-        .iconimg{
+        .iconimg {
             width: 5%;
             height: 5%;
             float: right;
         }
-        .fontCls{
+
+        .fontCls {
             margin-top: 2px !important;
             float: right;
         }
@@ -33,7 +34,8 @@
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">视频地址</label>
             <div class="layui-input-block">
-                <textarea placeholder="点击抖音视频右下角->复制链接,例如：https://v.douyin.com/XEByMr/" id="urlId" lay-verify="required" name="url" class="layui-textarea"></textarea>
+                <textarea placeholder="点击抖音视频右下角->复制链接,例如：https://v.douyin.com/XEByMr/" id="urlId" lay-verify="required"
+                          name="url" class="layui-textarea"></textarea>
             </div>
         </div>
     </div>
@@ -71,12 +73,15 @@
         form.on('submit(demo1)', function (data) {
             var loading = layer.load(0, {
                 shade: [0.1, '#fff'],
-                time: 10 * 1000
+                time: 6 * 1000
             });
-           var url =  $("#urlId").val();
-           console.log(url);
-           var videoUrl = "/kl/tools/douyinRemoval?url="+url;
-            $("#videoId").attr('src',videoUrl);
+            var url = $("#urlId").val();
+            var start = url.indexOf("http");
+            var end = url.lastIndexOf("/");
+            var decodeurl = url.substring(start, end+1);
+            console.log(decodeurl)
+            var videoUrl = "/kl/tools/douyinRemoval?url=" + decodeurl;
+            $("#videoId").attr('src', videoUrl);
             return false;
         });
     });
